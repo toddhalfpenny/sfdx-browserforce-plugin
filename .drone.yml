@@ -1,0 +1,23 @@
+kind: pipeline
+name: default
+
+workspace:
+  base: /home
+  path: project
+
+steps:
+  - name: test
+    image: circleci/node:11
+    commands:
+      - yarn
+      - yarn run test
+  - name: e2e
+    image: circleci/node:11-browsers
+    commands:
+      - sudo npm install -g sfdx-cli
+      - yarn
+      - echo "$SFDX_AUTH_URL" > /tmp/sfdxurl
+      - npx force:org:create -f config/project-scratch-def.json -a ci-scratch-org -s
+      - npx sfdx force:auth:sfdxurl:store -f /tmp/sfdxurl -a ci-devhub -d
+      - yarn run test:e2e
+      - npx sfdx force:org:delete --noprompt -u ci-scratch-org
