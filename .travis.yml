@@ -1,6 +1,9 @@
 language: node_js
 node_js:
   - "11"
+before_install:
+  # Enable user namespace cloning
+  - sysctl kernel.unprivileged_userns_clone=1
 jobs:
   include:
     - stage: test

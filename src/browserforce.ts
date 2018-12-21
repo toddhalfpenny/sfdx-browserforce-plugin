@@ -16,7 +16,6 @@ export default class Browserforce {
 
   public async login() {
     this.browser = await puppeteer.launch({
-      args: ['--no-sandbox', '--disable-setuid-sandbox'],
       headless: !(process.env.BROWSER_DEBUG === 'true')
     });
     this.page = await this.browser.newPage();
