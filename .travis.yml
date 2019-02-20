@@ -16,7 +16,9 @@ jobs:
       script:
         - sfdx force:org:create -f config/project-scratch-def.json -a ci-scratch-org -s
         - npm run test:e2e
-      after_script:
+      after_success:
+        - sfdx force:org:delete --noprompt -u ci-scratch-org
+      after_failure:
         - sfdx force:org:delete --noprompt -u ci-scratch-org
     - stage: release
       if: branch = master
