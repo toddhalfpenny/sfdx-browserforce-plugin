@@ -89,6 +89,7 @@ export default class Browserforce {
         const response = await page.goto(url, options);
         if (response) {
           if (!response.ok()) {
+            await this.throwPageErrors(page);
             throw new Error(`${response.status()}: ${response.statusText()}`);
           }
           if (response.url().indexOf('/?ec=302') > 0) {
